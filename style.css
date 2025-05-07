@@ -1,0 +1,208 @@
+/* Styles de base */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  color: #333;
+}/* Styles de base */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  color: #333;
+}
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+h2 {
+  color: #3498db;
+  margin-top: 0;
+}
+h3 {
+  color: #2c3e50;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+/* Container pour le canvas */
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+canvas {
+  border: 3px solid #3498db;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Contrôles et informations */
+.controls {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.status-box {
+  background-color: #e3f2fd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-left: 4px solid #2196f3;
+  transition: all 0.3s ease;
+}
+.status-box.error {
+  background-color: #ffebee;
+  border-left-color: #f44336;
+}
+.status-box.success {
+  background-color: #e8f5e9;
+  border-left-color: #4caf50;
+}
+/* Style pour les entrées à haute confiance (>95%) */
+.action-entry.high-confidence {
+  background-color: rgba(0, 255, 0, 0.1);
+  border-left: 3px solid #2ecc71;
+  font-weight: 500;
+}
+/* Message d'information pour l'utilisateur */
+.confidence-info {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #f8f9fa;
+}
+/* Style pour le compteur de détections */
+.detection-counter {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+}
+#status {
+  font-weight: bold;
+}
+
+/* Nouveau style pour l'alerte casquette */
+.action-entry.alarm-alert {
+  background-color: #fff3cd;
+  border-left: 3px solid #f0ad4e;
+  padding: 10px;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+
+.alert-text {
+  color: #d9534f;
+}
+
+/* Animation pour l'alerte */
+@keyframes pulse {
+  0% {
+    background-color: #fff3cd;
+  }
+  50% {
+    background-color: #ffcc80;
+  }
+  100% {
+    background-color: #fff3cd;
+  }
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #3498db;
+  margin-top: 0;
+}
+
+h3 {
+  color: #2c3e50;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+/* Container pour le canvas */
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+canvas {
+  border: 3px solid #3498db;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contrôles et informations */
+.controls {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-box {
+  background-color: #e3f2fd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-left: 4px solid #2196f3;
+  transition: all 0.3s ease;
+}
+
+.status-box.error {
+  background-color: #ffebee;
+  border-left-color: #f44336;
+}
+
+.status-box.success {
+  background-color: #e8f5e9;
+  border-left-color: #4caf50;
+}
+
+/* Style pour les entrées à haute confiance (>95%) */
+.action-entry.high-confidence {
+  background-color: rgba(0, 255, 0, 0.1);
+  border-left: 3px solid #2ecc71;
+  font-weight: 500;
+}
+
+/* Message d'information pour l'utilisateur */
+.confidence-info {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: #f8f9fa;
+}
+
+/* Style pour le compteur de détections */
+.detection-counter {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+#status {
+  font-weight: bold;
