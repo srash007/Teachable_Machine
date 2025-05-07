@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détection d'objets avec Teachable Machine</title>
+    
+    <!-- Chargement des bibliothèques p5.js et ml5.js avec vérification d'erreurs -->
+    <script>
+      // Fonction pour vérifier les erreurs lors du chargement des scripts
+      function handleScriptError(scriptName) {
+        console.error(`Erreur lors du chargement de ${scriptName}`);
+        document.getElementById('status').textContent = `Erreur: Échec du chargement de ${scriptName}`;
+        document.getElementById('status').style.color = 'red';
+        document.querySelector('.status-box').classList.add('error');
+        
+        // Ajouter au journal
+        const logElement = document.getElementById('action-log-content');
+        if (logElement) {
+          const entry = document.createElement('div');
+          entry.className = 'action-entry';
+          entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ERREUR: Échec du chargement de ${scriptName}`;
+          logElement.insertBefore(entry, logElement.firstChild);
+        }
+      }
+    </script>
+    
+    <!-- Chargement des bibliothèques avec gestion d'erreurs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js" 
+            onerror="handleScriptError('p5.js')"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js" 
+            onerror="handleScriptError('p5.sound.min.js')"></script>
+    <script src="https://unpkg.com/ml5@0.12.2/dist/ml5.min.js" 
+            onerror="handleScriptError('ml5.js')"
+            onload="document.getElementById('ml5-loaded').textContent = 'Chargé avec succès'"></script>
+    
+    <!-- CSS personnalisé -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+      /* Style supplémentaire pour le bouton de capture */
+      .capture-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 10px 0;
+        transition: background-color 0.3s;
+      }
+      
+      .capture-button:hover {
+        background-color: #45a049;
+      }
+      
+      .capture-button:active {
+        background-color: #3e8e41;
+      }
+      
+      .capture-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Détection d'objets avec Teachable Machine</h1>
+      
+      <div class="canvas-container">
+        <!-- Le canvas p5.js sera créé ici -->
+      </div>
+      
+      <!-- Bouton pour prendre une photo et faire la détection -->
+      <button id="btn-capture" class="capture-button">Prendre la photo</button>
+      
+      <div class="controls">
+        <div class="status-box">
+          <strong>Statut:</strong> <span id="status">Chargement...</span>
+        </div>
+        
+        <div class="detection-info">
+          <h2>Objet détecté: <span id="detected-object">Aucun</span></h2>
+          <div class="confidence-meter">
+            <div id="confidence-bar" style="width: 0%"></div>
+            <span id="confidence-value">0%</span>
+          </div>
+        </div>
+        
+        <div class="action-log">
+          <h3>Journal des actions</h3>
+          <div id="action-log-content"></div>
+        </div>
+        
+        <div class="debug-info">
+          <h3>Informations de débogage</h3>
+          <div class="debug-grid">
+            <div class="debug-item">
+              <strong>URL du modèle:</strong> 
+              <span id="model-url">https://teachablemachine.withgoogle.com/models/deInFz4X4/</span>
+            </div>
+            <div class="debug-item">
+              <strong>ml5.js:</strong> 
+              <span id="ml5-version">Vérification...</span>
+              (<span id="ml5-loaded">En attente...</span>)
+            </div>
+            <div class="debug-item">
+              <strong>p5.js:</strong>
+              <span id="p5-version">Vérification...</span>
+            </div>
+            <div class="debug-item">
+              <strong>Catégories attendues:</strong> 
+              <span id="available-categories">gourde, feu, plante</span>
+            </div>
+          </div>
+          
+          <!-- Actions de débogage -->
+          <div class="debug-actions">
+            <button id="btn-reload-model" class="debug-button">Recharger le modèle</button>
+            <button id="btn-check-cam" class="debug-button">Vérifier la caméra</button>
+            <button id="btn-clear-log" class="debug-button">Effacer le journal</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Script principal -->
+    <script src="sketch.js"></script>
+    
+    <!-- Script d'initialisation et de débogage -->
+    <script>
+      // Mettre à jour les versions des bibliothèques
+      function updateLibraryVersions() {
+        setTimeout(function() {
+          // Vérifier ml5.js
+          if (typeof ml5 !== 'undefined') {
+            document.getElementById('ml5-version').textContent = ml5.version || 'Version inconnue';
+            document.getElementById('action-log-content').innerHTML += 
+              `<div class="action-entry"><strong>[${new Date().toLocaleTimeString()}]</strong> ml5.js version ${ml5.version || 'inconnue'} détectée</div>`;
+          } else {
+            document.getElementById('ml5-version').textContent = 'Non disponible';
+            document.getElementById('ml5-version').style.color = 'red';
+          }
+          
+          // Vérifier p5.js
+          if (typeof p5 !== 'undefined') {
+            document.getElementById('p5-version').textContent = p5.VERSION || 'Version inconnue';
+          } else {
+            document.getElementById('p5-version').textContent = 'Non disponible';
+            document.getElementById('p5-version').style.color = 'red';
+          }
+        }, 1000);
+      }
+      
+      // Initialiser les boutons de débogage
+      function initDebugButtons() {
+        // Bouton pour recharger le modèle
+        document.getElementById('btn-reload-model').addEventListener('click', function() {
+          console.log("Rechargement manuel du modèle");
+          // Accéder à la fonction dans sketch.js
+          if (typeof loadTeachableModel === 'function') {
+            loadTeachableModel();
+            
+            // Ajouter au journal
+            const logElement = document.getElementById('action-log-content');
+            if (logElement) {
+              const entry = document.createElement('div');
+              entry.className = 'action-entry';
+              entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> Rechargement manuel du modèle`;
+              logElement.insertBefore(entry, logElement.firstChild);
+            }
+          } else {
+            console.error("La fonction loadTeachableModel n'est pas disponible");
+          }
+        });
+        
+        // Bouton pour vérifier la caméra
+        document.getElementById('btn-check-cam').addEventListener('click', function() {
+          console.log("Vérification de la caméra");
+          // Vérifier si la vidéo est disponible
+          if (typeof video !== 'undefined' && video) {
+            const status = video.loadedmetadata ? "Caméra active" : "Caméra non initialisée";
+            alert(`État de la caméra: ${status}`);
+            
+            // Ajouter au journal
+            const logElement = document.getElementById('action-log-content');
+            if (logElement) {
+              const entry = document.createElement('div');
+              entry.className = 'action-entry';
+              entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> Vérification de la caméra: ${status}`;
+              logElement.insertBefore(entry, logElement.firstChild);
+            }
+          } else {
+            alert("Objet vidéo non disponible");
+          }
+        });
+        
+        // Bouton pour effacer le journal
+        document.getElementById('btn-clear-log').addEventListener('click', function() {
+          document.getElementById('action-log-content').innerHTML = "";
+          console.log("Journal effacé");
+        });
+
+        // Bouton pour capturer l'image et faire la détection
+        document.getElementById('btn-capture').addEventListener('click', function() {
+          if (typeof captureAndClassify === 'function') {
+            captureAndClassify();
+          } else {
+            console.error("La fonction captureAndClassify n'est pas disponible");
+            logAction("ERREUR: Fonction de capture non disponible");
+          }
+        });
+      }
+      
+      // Fonction pour journaliser les actions (accessible depuis la page HTML)
+      function logAction(message) {
+        const logElement = document.getElementById('action-log-content');
+        if (logElement) {
+          const entry = document.createElement('div');
+          entry.className = 'action-entry';
+          entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
+          logElement.insertBefore(entry, logElement.firstChild);
+        }
+        
+        // Log dans la console également pour le débogage
+        console.log(`[ACTION] ${message}`);
+      }
+      
+      // Exécuter les fonctions d'initialisation
+      document.addEventListener('DOMContentLoaded', function() {
+        updateLibraryVersions();
+        initDebugButtons();
+        
+        // Ajouter un message initial au journal
+        const logElement = document.getElementById('action-log-content');
+        if (logElement) {
+          const entry = document.createElement('div');
+          entry.className = 'action-entry';
+          entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> Page initialisée`;
+          logElement.insertBefore(entry, logElement.firstChild);
+        }
+      });
+    </script>
+  </body>
+</html>
