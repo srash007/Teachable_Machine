@@ -18,6 +18,13 @@ JavaScript et HTML/CSS : pour l'interface utilisateur.
 
 TensorFlow.js : pour l'intégration du modèle d'IA dans le navigateur.
 
+## 📂 Structure du projet
+index.html : Interface utilisateur.
+
+script.js : Intégration du modèle et gestion de la caméra.
+
+style.css : Mise en forme de l'interface.
+
 ## 🎯 Objectifs pédagogiques
 Découvrir les concepts de base de l'intelligence artificielle.
 
