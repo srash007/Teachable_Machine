@@ -202,15 +202,15 @@ function updateDetectedObject(object, confidenceValue) {
   const detectionInfo = document.querySelector('.detection-info');
   if (detectionInfo) {
     // Réinitialiser les classes
-    detectionInfo.classList.remove('water-detected', 'fire-detected', 'plant-detected');
+    detectionInfo.classList.remove('water-detected', 'badge-detected', 'casque-detected');
     
     // Ajouter la classe appropriée en fonction de l'objet
     if (object === "gourde") {
       detectionInfo.classList.add('water-detected');
-    } else if (object === "feu") {
-      detectionInfo.classList.add('fire-detected');
-    } else if (object === "plante") {
-      detectionInfo.classList.add('plant-detected');
+    } else if (object === "bage") {
+      detectionInfo.classList.add('badge-detected');
+    } else if (object === "casque") {
+      detectionInfo.classList.add('casque-detected');
     }
   }
 }
